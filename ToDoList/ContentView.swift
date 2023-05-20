@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State var toDoItems: [ToDoItem] = []
+    @State private var showNewTask = false
+    
     var body: some View {
         VStack {
             HStack {
@@ -16,14 +20,29 @@ struct ContentView: View {
                     .fontWeight(.black)
                 Spacer()
                 Button {
-                    
+                    self.showNewTask = true
                 } label: {
                     Text("+")
                         .font(.system(size: 28))
                 }
-
             }.padding()
             Spacer()
+            List {
+                ForEach(toDoItems) { item1 in
+                    
+                    if (item1.isImportant) {
+                        Text("‼️ \(item1.title)")
+                    } else {
+                        Text(item1.title)
+                    }
+                }
+            }
+            .listStyle(.plain)
+        }
+        if showNewTask {
+            NewToDoView(toDoItems: $toDoItems, showNewTask: $showNewTask, title: "", isImportant: false)
+                .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.3)))
+            
         }
     }
 }
